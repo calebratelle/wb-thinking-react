@@ -6,7 +6,8 @@ import Rate from './Rate.jsx';
 import formatCurrency from '../utils/formatCurrency.js';
 import { useState } from 'react';
 
-export default function TableRow({initialInvoiceData, initialIsEditing}) {
+
+export default function TableRow({initialInvoiceData, initialIsEditing, deleteFunc}) {
 
   const [editMode, setIsEditing] = useState(initialIsEditing)
   const [description, setDescription] = useState(initialInvoiceData.description)
@@ -23,7 +24,8 @@ export default function TableRow({initialInvoiceData, initialIsEditing}) {
     <ModeButtons 
     isEditing={editMode} 
     editClick={changeEditMode} 
-    saveClick={changeNormalMode}/>
+    saveClick={changeNormalMode}
+    funkyDelete={deleteFunc}/>
 
     <Description 
     isEditing={editMode} 

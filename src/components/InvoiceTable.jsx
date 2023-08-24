@@ -7,10 +7,38 @@ import React from 'react'
 import TableHeader from './TableHeader';
 import AddButton from './AddButton';
 import TableRow from './TableRow';
+import { useState } from 'react';
+
+let globalId = 5
+
 
 export default function InvoiceTable({initialInvoiceList}) {
 
-  const rows = initialInvoiceList.map((invoiceItem) => {
+  const [currentList, setCurrentList]= useState(initialInvoiceList)
+
+  const addRow = () => {
+    const newInvoiceList = [...currentList]
+    const newRow = {
+      id: globalId,
+      description: 'Description',
+      rate: '',
+      hours: ''
+    }
+
+    newInvoiceList.push(newRow)
+
+    setCurrentList(newInvoiceList)
+
+    globalId++
+  }
+
+  const deleteRow = (id) => {
+    const filteredList = currentList.filter(el => el.id !== id)
+
+    setCurrentList(filteredList)
+  }
+
+  const rows = currentList.map((invoiceItem) => {
 
     const{id, description, rate, hours} = invoiceItem
 
@@ -18,7 +46,9 @@ export default function InvoiceTable({initialInvoiceList}) {
       <TableRow
       key={id}
       initialInvoiceData={{description: description, rate: rate, hours: hours}}
-      initialIsEditing={false}/>
+      initialIsEditing={false}
+      deleteFunc={() => deleteRow(id)}
+      />
     )
   })
 
@@ -55,7 +85,7 @@ export default function InvoiceTable({initialInvoiceList}) {
           </tr> */}
         </tbody>
         <tfoot>
-          <AddButton/>
+          <AddButton addClick={addRow}/>
         </tfoot>
       </table>
     </div>

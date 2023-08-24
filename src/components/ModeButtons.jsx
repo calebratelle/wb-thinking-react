@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function ModeButtons({isEditing, editClick, saveClick}) {
+export default function ModeButtons({isEditing, editClick, saveClick, funkyDelete}) {
 
 
   return isEditing ? (
@@ -9,7 +9,7 @@ export default function ModeButtons({isEditing, editClick, saveClick}) {
     </td>
   ) : (
     <td>
-      <button>Delete</button>
+      <button onClick={funkyDelete}>Delete</button>
       <button onClick={editClick}>Edit</button>
     </td>
   )
