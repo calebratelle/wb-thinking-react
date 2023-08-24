@@ -5,9 +5,10 @@ import Hours from './Hours.jsx';
 import Rate from './Rate.jsx';
 import formatCurrency from '../utils/formatCurrency.js';
 import { useState } from 'react';
+import axios from 'axios';
 
 
-export default function TableRow({initialInvoiceData, initialIsEditing, deleteFunc}) {
+export default function TableRow({initialInvoiceData, initialIsEditing, deleteFunc, id}) {
 
   const [editMode, setIsEditing] = useState(initialIsEditing)
   const [description, setDescription] = useState(initialInvoiceData.description)
@@ -15,7 +16,24 @@ export default function TableRow({initialInvoiceData, initialIsEditing, deleteFu
   const [hours, setHours] = useState(initialInvoiceData.hours)
 
   const changeEditMode = () => setIsEditing(true)
-  const changeNormalMode = () => setIsEditing(false)
+  const changeNormalMode = async () => {
+
+    let bodyObj = {
+      description: description,
+      rate: rate,
+      hours: hours
+    }
+
+    const {data} = await axios.put(`/editInvoice/${id}`, bodyObj)
+
+    if(!data.error){
+      setIsEditing(false)
+    }else{
+      alert('Something broke, try again!')
+    }
+    
+    
+  }
 
   
 
@@ -45,4 +63,4 @@ export default function TableRow({initialInvoiceData, initialIsEditing, deleteFu
     <td>{formatCurrency(rate * hours)}</td>
   </tr>
   )
-}
+  }

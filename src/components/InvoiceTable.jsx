@@ -8,34 +8,43 @@ import TableHeader from './TableHeader';
 import AddButton from './AddButton';
 import TableRow from './TableRow';
 import { useState } from 'react';
-
-let globalId = 5
+import axios from 'axios';
 
 
 export default function InvoiceTable({initialInvoiceList}) {
 
   const [currentList, setCurrentList]= useState(initialInvoiceList)
 
-  const addRow = () => {
-    const newInvoiceList = [...currentList]
-    const newRow = {
-      id: globalId,
-      description: 'Description',
-      rate: '',
-      hours: ''
-    }
+  const addRow = async () => {
 
-    newInvoiceList.push(newRow)
+    let {data} = await axios.post('/addInvoice', {description: 'Description goes here'})
 
-    setCurrentList(newInvoiceList)
 
-    globalId++
+    
+    setCurrentList([...currentList, data])
+
+
+    // const newInvoiceList = [...currentList]
+    // const newRow = {
+    //   id: globalId,
+    //   description: 'Description',
+    //   rate: '',
+    //   hours: ''
+    // }
+
+    // newInvoiceList.push(newRow)
+    // globalId++
   }
 
-  const deleteRow = (id) => {
-    const filteredList = currentList.filter(el => el.id !== id)
+  const deleteRow = async (id) => {
 
-    setCurrentList(filteredList)
+    const {data} = await axios.delete(`/removeInvoice/${id}`)
+
+    if(!data.error){
+      const filteredList = currentList.filter(el => el.id !== id)
+      setCurrentList(filteredList)
+    }
+    
   }
 
   const rows = currentList.map((invoiceItem) => {
@@ -45,6 +54,7 @@ export default function InvoiceTable({initialInvoiceList}) {
     return (
       <TableRow
       key={id}
+      id={id}
       initialInvoiceData={{description: description, rate: rate, hours: hours}}
       initialIsEditing={false}
       deleteFunc={() => deleteRow(id)}
