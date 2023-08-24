@@ -31,6 +31,8 @@ export default function InvoiceTable({initialInvoiceList}) {
         <tbody>
 
           {rows}
+
+
           {/* <TableRow 
           initialInvoiceData={{description: 'Janitor', rate: 50, hours: 40}}
           initialIsEditing={false}/>
